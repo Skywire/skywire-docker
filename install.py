@@ -13,7 +13,7 @@ from distutils import dir_util, file_util
 @click.option('--domain', prompt="The domain name to use without a subdomain e.g. example.com",
               help="Domain name to use", required=True)
 @click.option('--mage', prompt="Magento Version", type=click.Choice(["1", "2"]), help="Magento Version", required=True, default="2")
-@click.option('--php', prompt="Php Version", type=click.Choice(["54", "55", "56", "70", "71", "72", "73"]), help="Php Version", required=True, default="72")
+@click.option('--php', prompt="Php Version", type=click.Choice(["54", "5.4", "55", "5.5", "56" , "5.6", "70", "7.0", "71", "7.1", "72","7.2", "73","7.3"]), help="Php Version", required=True, default="73")
 @click.option('--http2/--no-http2', prompt="Use Http2?", help="Use Http2", required=True, is_flag=True, default=True)
 @click.option('--varnish', prompt="Use Varnish (Version 5 or 6, 0 for none)?", type=click.Choice(["5", "6", "0"]), help="Use Varnish", required=True, default="0")
 @click.option('--redis/--no-redis', prompt="Use Redis?", help="Use Redis", required=True, is_flag=True, default=False)
@@ -31,6 +31,8 @@ def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, mu
     click.echo("Installing skywire-docker")
     click.echo("Pulling latest version of skywire-docker from GitHub")
     git_update()
+
+    php = php.replace(".", "")
 
     hostname = 'docker.' + domain
     container_prefix = domain.split(".")[0]
