@@ -1,0 +1,8 @@
+# Default Kibana configuration for docker target
+server.name: kibana
+server.host: "0"
+elasticsearch.hosts: [ "http://{{ container_prefix }}_elasticsearch:9200" ]
+xpack.monitoring.ui.container.elasticsearch.enabled: true
+
+elasticsearch.username: elastic
+elasticsearch.password: changeme

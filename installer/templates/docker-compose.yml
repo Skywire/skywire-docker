@@ -1,0 +1,135 @@
+version: "3.7"
+services:
+  nginx:
+    container_name: {{ container_prefix }}_nginx
+    build: ./skywire-docker/nginx
+    ports:
+{% if varnish != '0' %}
+      - "8080:8080"
+{% else %}
+      - "80:80"
+{% endif %}
+      - "443:443"
+    links:
+      - phpfpm
+{% if varnish != '0' %}
+      - varnish
+{% endif %}
+    volumes:
+{% if mutagen %}
+      - appdata:/var/www/html
+{% else %}
+      - ./:/var/www/html
+{% endif %}
+    hostname: {{ hostname }}
+    depends_on: 
+      - phpfpm
+
+  phpfpm:
+    container_name: {{ container_prefix }}_phpfpm
+    build: ./skywire-docker/php-fpm/{{ php }}
+    links:
+      - elasticsearch
+      - mysql
+    volumes:
+  {% if mutagen %}
+      - appdata:/var/www/html
+{% else %}
+      - ./:/var/www/html
+{% endif %}
+    environment:
+      - PHP_IDE_CONFIG=serverName=skywire-docker
+
+  #To use blackfire, create a .env file with the following in it:
+  #BLACKFIRE_SERVER_ID=<some_id>
+  #BLACKFIRE_SERVER_TOKEN=<some_id>
+  blackfire:
+    container_name: {{ container_prefix }}_blackfire
+    image: blackfire/blackfire
+    environment:
+      - BLACKFIRE_SERVER_ID=${BLACKFIRE_SERVER_ID}
+      - BLACKFIRE_SERVER_TOKEN=${BLACKFIRE_SERVER_TOKEN}
+
+  mysql:
+    container_name: {{ container_prefix }}_mysql
+    image: percona:5.7 # versions available at https://hub.docker.com/_/percona/
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./skywire-docker/data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD={{ dbpass }}
+      - MYSQL_DATABASE={{ database }}
+
+{% if redis %}
+  redis:
+    container_name: {{ container_prefix }}_redis
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+{% endif %}
+
+{% if rabbitmq %}
+  rabbitmq:
+    container_name: {{ container_prefix }}_rabbitmq
+    image: rabbitmq:management
+    ports:
+      - "15672:15672"
+{% endif %}
+
+{% if varnish != '0' %}
+  varnish:
+    container_name: {{ container_prefix }}_varnish
+    build: ./skywire-docker/varnish
+    ports:
+      - "80:80"
+{% endif %}
+
+  elasticsearch:
+    container_name: {{ container_prefix }}_elasticsearch
+    build: ./skywire-docker/elasticsearch
+    ports:
+      - "9300:9300"
+      - "9200:9200"
+
+  elastichqhq:
+    container_name: {{ container_prefix }}_elastichq
+    image: elastichq/elasticsearch-hq
+    ports:
+      - "5000:5000"
+    links:
+      - elasticsearch
+    environment:
+      - HQ_DEFAULT_URL=http://{{ container_prefix }}_elasticsearch:9200
+
+  filebeat:
+    container_name: {{ container_prefix }}_filebeat
+    image: docker.elastic.co/beats/filebeat:6.8.6
+    user: root
+    volumes:
+      - ./skywire-docker/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml
+      - /var/lib/docker:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    links:
+      - elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.8.6
+    container_name: {{ container_prefix }}_kibana
+    ports:
+      - "5601:5601"
+    volumes:
+      - ./skywire-docker/kibana.yml:/usr/share/kibana/config/kibana.yml
+    links:
+      - elasticsearch
+
+  mailhog:
+    container_name: {{ container_prefix }}_mailhog
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+
+{% if mutagen %}
+volumes:
+  appdata:
+{% endif %}

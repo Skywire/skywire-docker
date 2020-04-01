@@ -1,0 +1,4 @@
+pyinstaller
+gitpython
+Jinja2
+click

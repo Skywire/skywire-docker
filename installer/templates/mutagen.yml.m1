@@ -1,0 +1,27 @@
+sync:
+  defaults:
+    mode: "two-way-resolved"
+    watch:
+      pollingInterval: 10
+    ignore:
+      paths:
+        - ".DS_Store"
+        - "._*"
+        - "*~"
+        - "*.sw[a-p]"
+        - ".idea"
+        - "/skywire-docker"
+        - "/media"
+        - "/var/**"
+        - "!/var/.htaccess"
+      vcs: true
+    permissions:
+      defaultFileMode: "0644"
+      defaultDirectoryMode: "0755"
+  development:
+    alpha: "."
+    beta: "docker://{{ container_prefix }}_phpfpm/var/www/html"
+    configurationBeta:
+      permissions:
+        defaultGroup: "www-data"
+        defaultOwner: "www-data"
