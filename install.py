@@ -70,18 +70,14 @@ def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, mu
         "filebeat.docker.yml",
         {
             "container_prefix": container_prefix
-        },
-        "",
-        "./../filebeat.docker.yml"
+        }
     )
 
     handle_template(
         "kibana.yml",
         {
             "container_prefix": container_prefix
-        },
-        "",
-        "./../kibana.yml"
+        }
     )
 
     if int(mage) == 2 and mutagen:
