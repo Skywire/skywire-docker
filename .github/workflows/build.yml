@@ -19,14 +19,18 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyinstaller
+          pip install -r requirements.txt
+
       - name: build with pyinstaller
-        run: pyinstaller --onefile --distpath bin -n ${{ matrix.os }} install.py
+        run: pyinstaller --onefile --distpath bin install.py
+
+      - name: Collect files
+        run: tar cvzf ${{ matrix.os }}.tar.gz bin installer skywire-docker
 
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: bin/${{ matrix.os }}
+          files: ${{ matrix.os }}.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
