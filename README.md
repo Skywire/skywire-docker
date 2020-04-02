@@ -203,34 +203,6 @@ The default IP should 10.0.75.1, you can check this from the docker for windows 
 
 You may also need to allow port 9000 through on the windows firewall, this is an exercise left to the reader.
 
-## Building The Installation Binaries
-
-To rebuild the installation binaries from source you will need:
-
-* Python 2.7+
-* pip
-
-The following commends will generate an install binary in `bin`:
-
-```sh
-sudo pip install -r requirements.txt
-pyinstaller --onefile --distpath bin install.py
-```
-
-### macOS Python/pip3 Installation
-
-Assuming you have [homebrew](https://brew.sh/) installed, use it to obtain the latest version of Python:
-
-```sh
-brew install python
-```
-
-`pip3` is also installed with this, so use that to install other dependencies which are listed in the `requirements.txt`:
-
-```sh
-sudo pip3 install -r requirements.txt
-```
-
 ## Troubleshooting
 
 ### Issue
