@@ -25,7 +25,7 @@ jobs:
         run: pyinstaller --onefile --distpath bin install.py
 
       - name: Collect files
-        run: tar cvzf ${{ matrix.os }}.tar.gz bin installer skywire-docker
+        run: tar cvzf ${{ matrix.os }}.tar.gz bin installer skywire-docker README.md
 
       - name: Release
         uses: softprops/action-gh-release@v1

@@ -1,7 +1,6 @@
 # Import necessary functions from Jinja2 module
 from jinja2 import Environment, FileSystemLoader
 import click
-from git import Repo
 import sys
 from os import path
 from distutils import dir_util, file_util
@@ -29,8 +28,6 @@ from distutils import dir_util, file_util
 def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, mutagen, ioncube, dbpass, database):
 
     click.echo("Installing skywire-docker")
-    click.echo("Pulling latest version of skywire-docker from GitHub")
-    git_update()
 
     php = php.replace(".", "")
 
@@ -120,17 +117,7 @@ def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, mu
     copy_readme(install_path)
 
     click.echo("Cleaning up temporary files in skywire-docker")
-    git_clean()
 
-def git_update():
-    repo = Repo((path.dirname(__file__)))
-    remote = repo.remote('origin')
-    remote.pull("master")
-
-def git_clean():
-    repo = Repo((path.dirname(__file__)))
-    git = repo.git
-    git.clean(["-fd","skywire-docker"])
 
 def handle_template(name, args, template_dir="skywire-docker/", dest=None):
     """
