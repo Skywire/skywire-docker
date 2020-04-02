@@ -10,17 +10,7 @@ Skywire uses docker to provide a consistent development environment across the t
 
 ## 2. Install Skywire Docker Configuration Into Your Project
 
-Clone this repository locally and run the OS specific installer from the cloned repository to install and configure settings specfic to you project:
-
-```sh
-./bin/install.mac
-```
-
-or
-
-```sh
-./bin/install.linux
-```
+Clone this repository and run `python install.py` or download the latest release for your OS and run `bin/install`
 
 You'll be prompted for project configuration options during the installation e.g. PHP version, M1 vs. M2
 
