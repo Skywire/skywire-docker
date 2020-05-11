@@ -21,11 +21,13 @@ from distutils import dir_util, file_util
               default=False)
 @click.option('--ioncube/--no-ioncube', prompt="Use IonCube?", help="Use IonCube", required=True, is_flag=True,
               default=False)
+@click.option('--xdebug/--no-xdebug', prompt="Use xdebug?", help="Use xdebug", required=True, is_flag=True,
+              default=False)
 @click.option('--dbpass', prompt="MySQL password (will use 'pa55w0rd' as default if not provided)",
               help="MySQL Password", required=False, default="")
 @click.option('--database', prompt="MySQL database name (will use 'docker' as default if not provided)",
               help="MySQL Database", required=False, default="")
-def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, mutagen, ioncube, dbpass, database):
+def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, mutagen, ioncube, xdebug, dbpass, database):
 
     click.echo("Installing skywire-docker")
 
@@ -108,7 +110,7 @@ def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, mu
     handle_template(fpm_updated, {"container_prefix": container_prefix, "mutagen": mutagen})
 
     fpm_dockerfile = "php-fpm/{}/Dockerfile".format(php)
-    handle_template(fpm_dockerfile, {"ioncube": ioncube, "mage": int(mage)})
+    handle_template(fpm_dockerfile, {"ioncube": ioncube, "mage": int(mage), "xdebug": xdebug})
 
     click.echo("Copying configured docker files to install path");
     copy_docker_files(install_path, mutagen)

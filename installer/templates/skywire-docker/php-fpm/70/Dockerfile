@@ -26,9 +26,11 @@ RUN apt-get update && apt-get install -y \
             wget \
         && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/\
         && docker-php-ext-install -j$(nproc) gd \
+        {% if xdebug %}xdebug{% endif %}
         && pecl install xdebug-2.6.1 \
+        {% endif %}
         && docker-php-ext-install mcrypt pdo_mysql soap intl bcmath xsl zip \
-        && docker-php-ext-enable opcache xdebug
+        && docker-php-ext-enable opcache {% if xdebug %}xdebug{% endif %}
 
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$version \
