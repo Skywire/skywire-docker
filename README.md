@@ -141,7 +141,7 @@ Varnish is the recommended FPC for M2 and can be installed with teh `skywire-doc
 
 ## [Mailhog](https://github.com/mailhog/MailHog)
 
-* I've now installed Mailhog. PHP is all setup to use it. Just make sure to turn on emails in the admin and Mailhog will catch any outgoing emails from PHP. All you need to do is open up hostname:8025 OR [this link](http://localhost:8025)
+* I've now installed Mailhog. PHP is all setup to use it. Just make sure to turn on emails in the admin and Mailhog will catch any outgoing emails from PHP. All you need to do is open up [http://localhost:8025](http://localhost:8025)
 
 ## [Mutagen](https://mutagen.io/)
 
