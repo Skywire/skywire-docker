@@ -95,6 +95,8 @@ services:
   elastichqhq:
     container_name: {{ container_prefix }}_elastichq
     image: elastichq/elasticsearch-hq
+    environment:
+      - discovery.type=single-node
     ports:
       - "5000:5000"
     links:
