@@ -12,7 +12,7 @@ Skywire uses docker to provide a consistent development environment across the t
 
 Download the release package for your system from the [releases page](https://github.com/Skywire/skywire-docker/releases). Decompress the tar.gz file and then open a terminal in the new folder.
 
-Now run the `bin/install` command (has to be from the root folder)
+Now run the `bin/install` command (**has to be from the root folder**)
 
 You'll be prompted for project configuration options during the installation e.g. PHP version, M1 vs. M2
 
