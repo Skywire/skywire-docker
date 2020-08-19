@@ -88,6 +88,8 @@ services:
   elasticsearch:
     container_name: {{ container_prefix }}_elasticsearch
     build: ./skywire-docker/elasticsearch
+    environment:
+      - discovery.type=single-node
     ports:
       - "9300:9300"
       - "9200:9200"
@@ -95,8 +97,6 @@ services:
   elastichqhq:
     container_name: {{ container_prefix }}_elastichq
     image: elastichq/elasticsearch-hq
-    environment:
-      - discovery.type=single-node
     ports:
       - "5000:5000"
     links:
