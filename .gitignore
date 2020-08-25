@@ -1,11 +1,3 @@
-# Created by .ignore support plugin (hsz.mobi)
-.idea
-
-build
-install.spec
-
-docker-compose.yml
-mutagen.yml
-
-__pycache__/
-venv
+/data/*
+!.gitkeep
+skywire-docker

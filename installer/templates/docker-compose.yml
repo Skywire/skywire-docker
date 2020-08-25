@@ -39,7 +39,7 @@ services:
 {% endif %}
     environment:
       - PHP_IDE_CONFIG=serverName=skywire-docker
-
+{% if not minimal %}
   #To use blackfire, create a .env file with the following in it:
   #BLACKFIRE_SERVER_ID=<some_id>
   #BLACKFIRE_SERVER_TOKEN=<some_id>
@@ -49,7 +49,7 @@ services:
     environment:
       - BLACKFIRE_SERVER_ID=${BLACKFIRE_SERVER_ID}
       - BLACKFIRE_SERVER_TOKEN=${BLACKFIRE_SERVER_TOKEN}
-
+{% endif %}
   mysql:
     container_name: {{ container_prefix }}_mysql
     image: percona:5.7 # versions available at https://hub.docker.com/_/percona/
@@ -94,6 +94,7 @@ services:
       - "9300:9300"
       - "9200:9200"
 
+{% if not minimal %}
   elastichqhq:
     container_name: {{ container_prefix }}_elastichq
     image: elastichq/elasticsearch-hq
@@ -130,6 +131,7 @@ services:
     image: mailhog/mailhog
     ports:
       - "8025:8025"
+{% endif %}
 
 {% if mutagen %}
 volumes:

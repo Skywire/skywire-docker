@@ -27,7 +27,9 @@ from distutils import dir_util, file_util
               help="MySQL Password", required=False, default="")
 @click.option('--database', prompt="MySQL database name (will use 'docker' as default if not provided)",
               help="MySQL Database", required=False, default="")
-def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, mutagen, ioncube, xdebug, dbpass, database):
+@click.option('--minimal', help="Minimal install", required=False, is_flag=True,
+              default=False)
+def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, mutagen, ioncube, xdebug, dbpass, database, minimal):
 
     click.echo("Installing skywire-docker")
 
@@ -59,7 +61,8 @@ def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, mu
             "rabbitmq": rabbitmq,
             "mutagen": mutagen,
             "dbpass": dbpass if dbpass else "pa55w0rd",
-            "database": database if database else "docker"
+            "database": database if database else "docker",
+            'minimal': minimal
         },
         "",
         "./../docker-compose.yml"
@@ -107,7 +110,7 @@ def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, mu
 
     click.echo("Generate php-fpm config");
     fpm_updated = "php-fpm/{}/src/skywire_updates.ini".format(php)
-    handle_template(fpm_updated, {"container_prefix": container_prefix, "mutagen": mutagen})
+    handle_template(fpm_updated, {"container_prefix": container_prefix, "mutagen": mutagen, 'minimal': minimal})
 
     fpm_dockerfile = "php-fpm/{}/Dockerfile".format(php)
     handle_template(fpm_dockerfile, {"ioncube": ioncube, "mage": int(mage), "xdebug": xdebug})

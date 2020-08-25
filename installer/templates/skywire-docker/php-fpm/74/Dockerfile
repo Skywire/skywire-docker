@@ -83,7 +83,9 @@ RUN curl -fsSL 'https://downloads.ioncube.com/loader_downloads/ioncube_loaders_l
     && rm -r /tmp/ioncube_loaders
 {% endif %}
 
+{% if not minimal %}
 #install ZSH
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
+{% endif %}
 
 WORKDIR /var/www/html/
