@@ -143,18 +143,6 @@ Varnish is the recommended FPC for M2 and can be installed with teh `skywire-doc
 
 * I've now installed Mailhog. PHP is all setup to use it. Just make sure to turn on emails in the admin and Mailhog will catch any outgoing emails from PHP. All you need to do is open up [http://localhost:8025](http://localhost:8025)
 
-## [Mutagen](https://mutagen.io/)
-
-We've now setup the site to use mutagen for local development. Install from their site: [https://mutagen.io/documentation/introduction/installation/](https://mutagen.io/documentation/introduction/installation/)
-
-1. Use `mutagen project start` to start the sync process
-1. Use `mutagen project list` to see the state of the sync
-   1. First sync takes a few minutes to complete.
-   1. It's then checking every 10 seconds for updates to sync
-1. You then bring down the syncing with `mutagen project terminate`
-1. More details here: [https://mutagen.io/documentation/orchestration/](https://mutagen.io/documentation/orchestration/)
-
-
 ## [Blackfire](https://blackfire.io/)
 
 Enter the shiny new performance profiler. To use blackfire, first signup for at least a hacker account [here](https://blackfire.io/signup). Once you have your account and can login, head to the [credentials page](https://blackfire.io/my/settings/credentials) where you'll find your server credentials.
