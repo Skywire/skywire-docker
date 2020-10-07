@@ -16,11 +16,7 @@ services:
       - varnish
 {% endif %}
     volumes:
-{% if mutagen %}
-      - appdata:/var/www/html
-{% else %}
       - ./:/var/www/html
-{% endif %}
     hostname: {{ hostname }}
     depends_on: 
       - phpfpm
@@ -32,11 +28,7 @@ services:
       - elasticsearch
       - mysql
     volumes:
-  {% if mutagen %}
-      - appdata:/var/www/html
-{% else %}
       - ./:/var/www/html
-{% endif %}
     environment:
       - PHP_IDE_CONFIG=serverName=skywire-docker
 {% if not minimal %}
@@ -131,9 +123,4 @@ services:
     image: mailhog/mailhog
     ports:
       - "8025:8025"
-{% endif %}
-
-{% if mutagen %}
-volumes:
-  appdata:
 {% endif %}

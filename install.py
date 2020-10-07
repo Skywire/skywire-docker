@@ -17,8 +17,6 @@ from distutils import dir_util, file_util
 @click.option('--varnish', prompt="Use Varnish (Version 5 or 6, 0 for none)?", type=click.Choice(["5", "6", "0"]), help="Use Varnish", required=True, default="0")
 @click.option('--redis/--no-redis', prompt="Use Redis?", help="Use Redis", required=True, is_flag=True, default=False)
 @click.option('--rabbitmq/--no-rabbitmq', prompt="Use RabbitMQ?", help="Use RabbitMQ", required=True, is_flag=True, default=False)
-@click.option('--mutagen/--no-mutagen', prompt="Use Mutagen?", help="Use Mutagen", required=True, is_flag=True,
-              default=False)
 @click.option('--ioncube/--no-ioncube', prompt="Use IonCube?", help="Use IonCube", required=True, is_flag=True,
               default=False)
 @click.option('--xdebug/--no-xdebug', prompt="Use xdebug?", help="Use xdebug", required=True, is_flag=True,
@@ -29,7 +27,7 @@ from distutils import dir_util, file_util
               help="MySQL Database", required=False, default="")
 @click.option('--minimal', help="Minimal install", required=False, is_flag=True,
               default=False)
-def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, mutagen, ioncube, xdebug, dbpass, database, minimal):
+def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, ioncube, xdebug, dbpass, database, minimal):
 
     click.echo("Installing skywire-docker")
 
@@ -59,7 +57,6 @@ def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, mu
             "redis": redis,
             "varnish": varnish,
             "rabbitmq": rabbitmq,
-            "mutagen": mutagen,
             "dbpass": dbpass if dbpass else "pa55w0rd",
             "database": database if database else "docker",
             'minimal': minimal
@@ -82,41 +79,19 @@ def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, mu
         }
     )
 
-    if int(mage) == 2 and mutagen:
-        click.echo("Generate Mutagen conf");
-        handle_template(
-                "mutagen.yml",
-                {
-                    "container_prefix": container_prefix
-                },
-                "",
-                "./../mutagen.yml"
-            )
-
-    if int(mage) == 1 and mutagen:
-        click.echo("Generate Mutagen conf M1");
-        handle_template(
-                "mutagen.yml.m1",
-                {
-                    "container_prefix": container_prefix
-                },
-                "",
-                "./../mutagen.yml"
-            )
-
     if int(varnish) > 0:
         click.echo("Creating varnish config");
         handle_template("varnish/Dockerfile", {"varnish": varnish})
 
     click.echo("Generate php-fpm config");
     fpm_updated = "php-fpm/{}/src/skywire_updates.ini".format(php)
-    handle_template(fpm_updated, {"container_prefix": container_prefix, "mutagen": mutagen, 'minimal': minimal})
+    handle_template(fpm_updated, {"container_prefix": container_prefix, 'minimal': minimal})
 
     fpm_dockerfile = "php-fpm/{}/Dockerfile".format(php)
     handle_template(fpm_dockerfile, {"ioncube": ioncube, "mage": int(mage), "xdebug": xdebug})
 
     click.echo("Copying configured docker files to install path");
-    copy_docker_files(install_path, mutagen)
+    copy_docker_files(install_path)
 
     click.echo("Copying reamme over");
     copy_readme(install_path)
@@ -138,12 +113,10 @@ def handle_template(name, args, template_dir="skywire-docker/", dest=None):
     file.writelines(rendered)
 
 
-def copy_docker_files(install_path, mutagen):
+def copy_docker_files(install_path):
     dir_util.copy_tree('skywire-docker', install_path + '/skywire-docker', False)
     file_util.copy_file('docker-compose.yml', install_path + "/docker-compose.yml")
     #file_util.copy_file('README.md', install_path + "/skywire-docker/README.md")
-    if mutagen:
-        file_util.copy_file('mutagen.yml', install_path + "/mutagen.yml")
 
 def copy_readme(install_path):
     f = open(install_path + '/README.md', 'a')
