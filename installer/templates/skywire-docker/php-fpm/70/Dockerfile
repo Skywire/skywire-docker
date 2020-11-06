@@ -70,7 +70,7 @@ RUN curl -O https://files.magerun.net/n98-magerun2.phar \
 {% endif %}
 
 #Install composer
-RUN curl -sS https://getcomposer.org/installer | php \
+RUN curl -sS https://getcomposer.org/installer | php -- --1  \
     && mv composer.phar /usr/local/bin/composer
 
 {% if ioncube %}
