@@ -39,7 +39,7 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && mv /tmp/blackfire/blackfire-*.so $(php -r "echo ini_get ('extension_dir');")/blackfire.so \
     && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini \
     && rm -rf /tmp/blackfire /tmp/blackfire-probe.tar.gz
-    
+
 #install NVM
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
 
@@ -72,6 +72,9 @@ RUN curl -O https://files.magerun.net/n98-magerun2.phar \
 #Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --1  \
     && mv composer.phar /usr/local/bin/composer
+
+# Install Prestissimo composer plugin for parallel composer downloads
+RUN composer global require hirak/prestissimo
 
 {% if ioncube %}
 #install ioncube

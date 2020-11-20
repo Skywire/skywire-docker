@@ -72,6 +72,9 @@ RUN curl -O https://files.magerun.net/n98-magerun2.phar \
 RUN curl -sS https://getcomposer.org/installer | php -- --1  \
     && mv composer.phar /usr/local/bin/composer
 
+# Install Prestissimo composer plugin for parallel composer downloads
+RUN composer global require hirak/prestissimo
+
 {% if ioncube %}
 #install ioncube
 RUN curl -fsSL 'https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz' -o ioncube_loaders.tar.gz \
