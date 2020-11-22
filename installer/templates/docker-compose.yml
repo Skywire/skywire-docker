@@ -23,7 +23,7 @@ services:
 
   phpfpm:
     container_name: {{ container_prefix }}_phpfpm
-    build: ./skywire-docker/php-fpm/{{ php }}
+    build: ./skywire-docker/php-fpm
     links:
       - elasticsearch
       - mysql
@@ -96,27 +96,6 @@ services:
       - elasticsearch
     environment:
       - HQ_DEFAULT_URL=http://{{ container_prefix }}_elasticsearch:9200
-
-  filebeat:
-    container_name: {{ container_prefix }}_filebeat
-    image: docker.elastic.co/beats/filebeat:6.8.6
-    user: root
-    volumes:
-      - ./skywire-docker/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml
-      - /var/lib/docker:/var/lib/docker:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-    links:
-      - elasticsearch
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:6.8.6
-    container_name: {{ container_prefix }}_kibana
-    ports:
-      - "5601:5601"
-    volumes:
-      - ./skywire-docker/kibana.yml:/usr/share/kibana/config/kibana.yml
-    links:
-      - elasticsearch
 
   mailhog:
     container_name: {{ container_prefix }}_mailhog

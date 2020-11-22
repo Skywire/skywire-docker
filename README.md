@@ -29,16 +29,18 @@ docker-compose up -d
 
 * `docker-compose build` will build the services in the `docker-compose.yml` file.
 * `docker-compose up` creates and starts the  containers. The `-d` flagstarts the containers in the background and leaves them running. [Kitematic](https://kitematic.com/) can then be used to view logs, ssh into a container etc.
-* You will need to [update your hosts file](https://www.sonassi.com/help/general/editing-hosts-file) with the Docker IP and hostnames:
+* You will need to [update your hosts file](https://www.sonassi.com/help/general/editing-hosts-file) with the Docker IP and hostnames. This also sets up for IPV6:
 
 ```sh
 127.0.0.1 docker.XXX.YYY XXX_mysql XXX_redis XXX_elasticsearch
+::1 docker.XXX.YYY XXX_mysql XXX_redis XXX_elasticsearch
 ```
 
 * Replace `XXX` with the Second Level Domain(SLD) and `YYY` with the Top Level Domain(TLD). `docker` is always used for consistency. So, for a production domain of `www.somehost.co.uk` the hosts entry would be:
 
 ```sh
 127.0.0.1 docker.somehost.co.uk somehost_mysql somehost_redis somehost_elasticsearch
+::1 docker.somehost.co.uk somehost_mysql somehost_redis somehost_elasticsearch
 ```
 
 At this point you should have a set of running docker containers, correctly configured for your project. We still need to configure the application of your project for Docker, which is covered below.
@@ -92,18 +94,6 @@ Connection details to connect to the Docker database:
 <password><![CDATA[pa55w0rd]]></password><!-- Default root Password -->
 <dbname><![CDATA[docker]]></dbname><!-- Default DB name -->
 ```
-
-## [Kibana](https://www.elastic.co/guide/en/kibana/6.8)
-
-We can use kibana to look at all the logs across the entire docker instance. It needs a little bit of setup though
-
-* Head to [http://localhost:5601/](http://localhost:5601/)
-* You'll be asked to create a new index pattern
-    * Index pattern should be `filebeat-*`
-    * It might be worth narrowing down the amount of logs using a query here, ie `filebeat-2020-*`
-    * Click next
-* Set `Time Filter field name` to `@timestamp`
-* Click `Create index pattern`
 
 ## [Varnish](https://varnish-cache.org/)
 
