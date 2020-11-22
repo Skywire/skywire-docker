@@ -32,8 +32,9 @@ RUN apt-get update && apt-get install -y \
         {% if phpDot == '7.2' or phpDot == '7.3' or phpDot == '7.4' %}
         && pecl install mcrypt-1.0.3 \
         {% endif %}
+        && pecl install xdebug-2.9.8 \
         && docker-php-ext-install {% if phpDot == '7.1' %}mcrypt{% endif %} pdo_mysql soap intl bcmath xsl zip sockets \
-        && docker-php-ext-enable opcache mcrypt
+        && docker-php-ext-enable opcache xdebug mcrypt
 
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$version \
@@ -53,7 +54,7 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 COPY src/skywire_updates.ini $PHP_INI_DIR/conf.d/
 
-RUN sed -e 's/9000/9001/' \
+RUN sed -e 's/9000/9002/' \
         -i /usr/local/etc/php-fpm.d/zz-docker.conf
 
 #Install grunt globally
