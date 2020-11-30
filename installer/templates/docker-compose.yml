@@ -23,7 +23,21 @@ services:
 
   phpfpm:
     container_name: {{ container_prefix }}_phpfpm
-    build: ./skywire-docker/php-fpm
+    build:
+      context: ./skywire-docker/php-fpm
+      target: php_base
+    links:
+      - elasticsearch
+      - mysql
+    volumes:
+      - ./:/var/www/html
+
+{% if xdebug %}
+  phpfpm_xdebug:
+    container_name: {{ container_prefix }}_phpfpm_xdebug
+    build:
+      context: ./skywire-docker/php-fpm
+      target: php_xdebug
     links:
       - elasticsearch
       - mysql
@@ -31,6 +45,8 @@ services:
       - ./:/var/www/html
     environment:
       - PHP_IDE_CONFIG=serverName=skywire-docker
+{% endif %}
+
 {% if not minimal %}
   #To use blackfire, create a .env file with the following in it:
   #BLACKFIRE_SERVER_ID=<some_id>

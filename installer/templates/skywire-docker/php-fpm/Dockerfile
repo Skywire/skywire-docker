@@ -1,4 +1,4 @@
-FROM php:{{ phpDot }}-fpm
+FROM php:{{ phpDot }}-fpm AS php_base
 
 LABEL com.skywire.container="Php-Fpm"
 LABEL version="1.0.0"
@@ -30,10 +30,10 @@ RUN apt-get update && apt-get install -y \
         && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/\
         && docker-php-ext-install -j$(nproc) gd \
         {% if phpDot == '7.2' or phpDot == '7.3' or phpDot == '7.4' %}
-        && pecl install {% if xdebug %}xdebug-2.9.8{% endif %} mcrypt-1.0.3 \
+        && pecl install mcrypt-1.0.3 \
         {% endif %}
         && docker-php-ext-install {% if phpDot == '7.1' %}mcrypt{% endif %} pdo_mysql soap intl bcmath xsl zip sockets \
-        && docker-php-ext-enable opcache {% if xdebug %}xdebug{% endif %} mcrypt
+        && docker-php-ext-enable opcache mcrypt
 
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$version \
@@ -107,3 +107,11 @@ RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -
 {% endif %}
 
 WORKDIR /var/www/html/
+
+FROM php_base AS php_xdebug
+
+RUN pecl install xdebug-2.9.8 \
+        && docker-php-ext-enable xdebug
+
+RUN sed -e 's/9001/9002/' \
+        -i /usr/local/etc/php-fpm.d/zz-docker.conf

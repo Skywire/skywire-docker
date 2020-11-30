@@ -1,20 +1,29 @@
-# Magento Vars
+upstream php-fpm {
+        server {{ container_prefix }}_phpfpm:9001;
+    }
+upstream php-fpm-xdebug {
+    server {{ container_prefix }}_phpfpm_xdebug:9002;
+}
 
-#
-# Example configuration:
-# upstream fastcgi_backend {
-#    # use tcp connection
-#    # server  127.0.0.1:9000;
-#    # or socket
-#    server   unix:/var/run/php5-fpm.sock;
-# }
-# server {
-#    listen 80;
-#    server_name mage.dev;
-#    set $MAGE_ROOT /var/www/magento2;
-#    set $MAGE_MODE developer;
-#    include /vagrant/magento2/nginx.conf.sample;
-# }
+# XDebug mappings.
+map $arg_XDEBUG_SESSION_START $session_arg_pass {
+    default php-fpm;
+    1 php-fpm-xdebug;
+}
+
+map $cookie_XDEBUG_SESSION $cookie_arg_pass {
+    default $session_arg_pass;
+    xdebug php-fpm-xdebug;
+    1 php-fpm-xdebug;
+    PHPSTORM php-fpm-xdebug;
+    XDEBUG_ECLIPSE php-fpm-xdebug;
+}
+
+map $arg_XDEBUG_PROFILE $xdebug_test_pass {
+    default $cookie_arg_pass;
+    1 php-fpm-xdebug;
+}
+
 {% if varnish != '0' %}
 server {
     server_name {{ hostname }};
@@ -89,7 +98,7 @@ server {
     location /setup {
         root $MAGE_ROOT;
         location ~ ^/setup/index.php {
-            fastcgi_pass   {{ container_prefix }}_phpfpm:9001;
+            fastcgi_pass   $xdebug_test_pass;
             fastcgi_index  index.php;
             fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
             include        fastcgi_params;
@@ -109,7 +118,7 @@ server {
 
         location ~ ^/update/index.php {
             fastcgi_split_path_info ^(/update/index.php)(/.+)$;
-            fastcgi_pass   {{ container_prefix }}_phpfpm:9001;
+            fastcgi_pass   $xdebug_test_pass;
             fastcgi_index  index.php;
             fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
             fastcgi_param  PATH_INFO        $fastcgi_path_info;
@@ -214,7 +223,7 @@ server {
 
     location ~ (index|get|static|report|404|503)\.php$ {
         try_files $uri =404;
-        fastcgi_pass   {{ container_prefix }}_phpfpm:9001;
+        fastcgi_pass   $xdebug_test_pass;
 
         fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";
         fastcgi_read_timeout 600s;
