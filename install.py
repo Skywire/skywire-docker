@@ -75,9 +75,6 @@ def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, io
     handle_template("php-fpm/src/skywire_updates.ini", {"container_prefix": container_prefix, 'minimal': minimal})
     handle_template("php-fpm/Dockerfile", {"ioncube": ioncube, "mage": int(mage), "phpDot": phpDot})
 
-    handle_template("php-fpm-xdebug/src/skywire_updates.ini", {"container_prefix": container_prefix, 'minimal': minimal})
-    handle_template("php-fpm-xdebug/Dockerfile", {"ioncube": ioncube, "mage": int(mage), "phpDot": phpDot})
-
     click.echo("Copying configured docker files to install path");
     copy_docker_files(install_path)
 

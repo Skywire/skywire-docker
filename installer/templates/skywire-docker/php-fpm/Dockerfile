@@ -1,4 +1,4 @@
-FROM php:{{ phpDot }}-fpm
+FROM php:{{ phpDot }}-fpm AS php_base
 
 LABEL com.skywire.container="Php-Fpm"
 LABEL version="1.0.0"
@@ -107,3 +107,11 @@ RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -
 {% endif %}
 
 WORKDIR /var/www/html/
+
+FROM php_base AS php_xdebug
+
+RUN pecl install xdebug-2.9.8 \
+        && docker-php-ext-enable xdebug
+
+RUN sed -e 's/9001/9002/' \
+        -i /usr/local/etc/php-fpm.d/zz-docker.conf
