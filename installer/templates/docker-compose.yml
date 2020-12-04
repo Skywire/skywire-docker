@@ -64,7 +64,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./skywire-docker/data:/var/lib/mysql
+      - ./skywire-docker/data/mysql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD={{ dbpass }}
       - MYSQL_DATABASE={{ database }}
@@ -98,6 +98,8 @@ services:
     build: ./skywire-docker/elasticsearch
     environment:
       - discovery.type=single-node
+    volumes:
+      - ./skywire-docker/data/elasticsearch:/usr/share/elasticsearch/data
     ports:
       - "9300:9300"
       - "9200:9200"
