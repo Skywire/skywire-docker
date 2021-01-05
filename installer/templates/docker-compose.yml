@@ -94,7 +94,7 @@ services:
 {% endif %}
 
   elasticsearch:
-    container_name: {{ container_prefix }}_elasticsearch
+    container_name: {{ container_prefix }}-elasticsearch
     build: ./skywire-docker/elasticsearch
     environment:
       - discovery.type=single-node
@@ -113,7 +113,7 @@ services:
     links:
       - elasticsearch
     environment:
-      - HQ_DEFAULT_URL=http://{{ container_prefix }}_elasticsearch:9200
+      - HQ_DEFAULT_URL=http://{{ container_prefix }}-elasticsearch:9200
 
   mailhog:
     container_name: {{ container_prefix }}_mailhog
