@@ -67,6 +67,14 @@ def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, io
         "./../docker-compose.yml"
     )
 
+    click.echo("Generate makefile")
+    handle_template(
+        "makefile",
+        {},
+        "",
+        "./../makefile"
+    )
+
     if int(varnish) > 0:
         click.echo("Creating varnish config");
         handle_template("varnish/Dockerfile", {"varnish": varnish})

@@ -108,10 +108,22 @@ RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -
 
 WORKDIR /var/www/html/
 
+ARG USER_ID
+ARG GROUP_ID
+ARG USERNAME
+
+RUN addgroup --gid $GROUP_ID $USERNAME
+RUN adduser --disabled-password  --gecos '' --uid $USER_ID --gid $GROUP_ID $USERNAME
+USER $USERNAME
+
 FROM php_base AS php_xdebug
+
+USER root
 
 RUN pecl install xdebug-2.9.8 \
         && docker-php-ext-enable xdebug
 
 RUN sed -e 's/9001/9002/' \
         -i /usr/local/etc/php-fpm.d/zz-docker.conf
+
+USER $USERNAME
