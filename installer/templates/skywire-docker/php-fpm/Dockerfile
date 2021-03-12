@@ -112,7 +112,7 @@ ARG USER_ID
 ARG GROUP_ID
 ARG USERNAME
 
-RUN addgroup --gid $GROUP_ID $USERNAME
+RUN getent group $GROUP_ID || addgroup --gid $GROUP_ID $USERNAME
 RUN adduser --disabled-password  --gecos '' --uid $USER_ID --gid $GROUP_ID $USERNAME
 USER $USERNAME
 
