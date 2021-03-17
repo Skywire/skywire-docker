@@ -67,6 +67,14 @@ def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, io
         "./../docker-compose.yml"
     )
 
+    click.echo("Generate makefile")
+    handle_template(
+        "makefile",
+        {},
+        "",
+        "./../makefile"
+    )
+
     if int(varnish) > 0:
         click.echo("Creating varnish config");
         handle_template("varnish/Dockerfile", {"varnish": varnish})
@@ -101,6 +109,7 @@ def handle_template(name, args, template_dir="skywire-docker/", dest=None):
 def copy_docker_files(install_path):
     dir_util.copy_tree('skywire-docker', install_path + '/skywire-docker', False)
     file_util.copy_file('docker-compose.yml', install_path + "/docker-compose.yml")
+    file_util.copy_file('makefile', install_path + "/makefile")
     #file_util.copy_file('README.md', install_path + "/skywire-docker/README.md")
 
 def copy_readme(install_path):

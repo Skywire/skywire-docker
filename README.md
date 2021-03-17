@@ -23,7 +23,7 @@ Once complete a number of new files will exist in your project which define it's
 * `cd` to your project's directory and run the commands below to build and start the containers:
 
 ```sh
-docker-compose build
+make docker-build
 docker-compose up -d
 ```
 
