@@ -101,20 +101,21 @@ RUN curl -fsSL 'https://downloads.ioncube.com/loader_downloads/ioncube_loaders_l
     && rm -r /tmp/ioncube_loaders
 {% endif %}
 
-{% if not minimal %}
-#install ZSH
-RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
-{% endif %}
-
 WORKDIR /var/www/html/
 
 ARG USER_ID
 ARG GROUP_ID
 ARG USERNAME
 
+ENV	HOME /home/$USERNAME
 RUN getent group $GROUP_ID || addgroup --gid $GROUP_ID $USERNAME
 RUN adduser --disabled-password  --gecos '' --uid $USER_ID --gid $GROUP_ID $USERNAME
 USER $USERNAME
+
+{% if not minimal %}
+#install ZSH
+RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
+{% endif %}
 
 FROM php_base AS php_xdebug
 
