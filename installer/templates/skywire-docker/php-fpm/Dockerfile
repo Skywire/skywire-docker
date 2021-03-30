@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
             default-mysql-client \
             golang-go \
             git \
-            npm \
+            nodejs \
             libfreetype6-dev \
             libjpeg62-turbo-dev \
             libpng-dev \
