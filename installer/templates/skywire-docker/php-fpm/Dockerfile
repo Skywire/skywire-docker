@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
             golang-go \
             git \
             nodejs \
+            npm \
             libfreetype6-dev \
             libjpeg62-turbo-dev \
             libpng-dev \
@@ -55,6 +56,9 @@ COPY src/skywire_updates.ini $PHP_INI_DIR/conf.d/
 
 RUN sed -e 's/9000/9001/' \
         -i /usr/local/etc/php-fpm.d/zz-docker.conf
+        
+#Install grunt globally
+RUN npm install grunt -g
 
 #Install n98 magerun tools
 {% if mage == 1 %}
