@@ -56,9 +56,6 @@ COPY src/skywire_updates.ini $PHP_INI_DIR/conf.d/
 RUN sed -e 's/9000/9001/' \
         -i /usr/local/etc/php-fpm.d/zz-docker.conf
 
-#Install grunt globally
-RUN npm install grunt -g
-
 #Install n98 magerun tools
 {% if mage == 1 %}
 RUN curl -L -o n98-magerun.phar https://files.magerun.net/n98-magerun.phar \
