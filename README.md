@@ -56,12 +56,11 @@ The PHP container has all the tools required to build and use the site locally. 
 * NVM
 * redis-tools
 * pv
-* zsh
 
 To connect to it you can add the following alias to your `~/.bashrc` file:
 ~~~
 de(){
-    docker exec -i -t $1 zsh
+    docker exec -i -t $1 bash
 }
 
 dephp() {
