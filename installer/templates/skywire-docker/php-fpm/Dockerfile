@@ -26,9 +26,13 @@ RUN apt-get update && apt-get install -y \
             vim \
             redis-tools \
             pv \
-            zsh \
-            wget \
-        && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/\
+            wget
+
+{% if phpDot == '7.4' %}
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+{% else %}
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/\
+{% endif %}
         && docker-php-ext-install -j$(nproc) gd \
         {% if phpDot == '7.2' or phpDot == '7.3' or phpDot == '7.4' %}
         && pecl install mcrypt-1.0.3 \
@@ -100,11 +104,6 @@ RUN curl -fsSL 'https://downloads.ioncube.com/loader_downloads/ioncube_loaders_l
     && docker-php-ext-enable ioncube_loader_lin_7.4.so \
     {% endif %}
     && rm -r /tmp/ioncube_loaders
-{% endif %}
-
-{% if not minimal %}
-#install ZSH
-RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
 {% endif %}
 
 WORKDIR /var/www/html/
