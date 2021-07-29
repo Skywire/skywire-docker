@@ -149,6 +149,8 @@ BLACKFIRE_SERVER_TOKEN=<Server Token>
 
 ## XDebug
 
+These instructions are only necessary for php 7.1 and 7.2
+
 ### Mac
 
 To get XDebug running on mac.
