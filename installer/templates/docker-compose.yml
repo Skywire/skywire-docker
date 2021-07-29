@@ -45,6 +45,8 @@ services:
       - ./:/var/www/html
     environment:
       - PHP_IDE_CONFIG=serverName=skywire-docker
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 {% endif %}
 
 {% if not minimal %}

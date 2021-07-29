@@ -120,10 +120,21 @@ FROM php_base AS php_xdebug
 
 USER root
 
+{% if phpDot == '7.1' or phpDot == '7.2' %}
 RUN pecl install xdebug-2.9.8 \
+{% else %}
+RUN pecl install xdebug \
+{% endif %}
         && docker-php-ext-enable xdebug
 
 RUN sed -e 's/9001/9002/' \
         -i /usr/local/etc/php-fpm.d/zz-docker.conf
+
+
+{% if phpDot == '7.1' or phpDot == '7.2' %}
+COPY src/skywire_updates_xdebug2.ini $PHP_INI_DIR/conf.d/
+{% else %}
+COPY src/skywire_updates_xdebug3.ini $PHP_INI_DIR/conf.d/
+{% endif %}
 
 USER $USERNAME
