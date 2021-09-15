@@ -78,8 +78,15 @@ RUN curl -O https://files.magerun.net/n98-magerun2.phar \
 {% endif %}
 
 #Install composer
+
+{% if phpDot == '7.1' or phpDot == '7.2' %}
+RUN curl -sS https://getcomposer.org/installer | php -- --1  \
+    && mv composer.phar /usr/local/bin/composer
+{% else %}
 RUN curl -sS https://getcomposer.org/installer | php -- --2  \
     && mv composer.phar /usr/local/bin/composer
+{% endif %}
+
 
 {% if ioncube %}
 #install ioncube
