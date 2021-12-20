@@ -1,5 +1,5 @@
 #get official docker image	
-FROM elasticsearch:6.8.6	
+FROM docker.elastic.co/elasticsearch/elasticsearch:6.8.6
 
 MAINTAINER Tom Scott-Malden tom@skywire.co.uk	
 
