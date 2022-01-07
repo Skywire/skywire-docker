@@ -120,6 +120,8 @@ RUN getent group $GROUP_ID || addgroup --gid $GROUP_ID $USERNAME
 RUN adduser --disabled-password  --gecos '' --uid $USER_ID --gid $GROUP_ID $USERNAME
 USER $USERNAME
 
+ENV HOME /home/$USERNAME
+
 FROM php_base AS php_xdebug
 
 USER root
