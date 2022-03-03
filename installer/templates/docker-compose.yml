@@ -2,6 +2,7 @@ version: "3.7"
 services:
   nginx:
     container_name: {{ container_prefix }}_nginx
+    init: true
     build: ./skywire-docker/nginx
     ports:
 {% if varnish != '0' %}
@@ -23,6 +24,7 @@ services:
 
   phpfpm:
     container_name: {{ container_prefix }}_phpfpm
+    init: true
     build:
       context: ./skywire-docker/php-fpm
       target: php_base
@@ -35,6 +37,7 @@ services:
 {% if xdebug %}
   phpfpm_xdebug:
     container_name: {{ container_prefix }}_phpfpm_xdebug
+    init: true
     build:
       context: ./skywire-docker/php-fpm
       target: php_xdebug
@@ -62,6 +65,7 @@ services:
 {% endif %}
   mysql:
     container_name: {{ container_prefix }}_mysql
+    init: true
     image: percona:5.7 # versions available at https://hub.docker.com/_/percona/
     ports:
       - "3306:3306"
@@ -74,6 +78,7 @@ services:
 {% if redis %}
   redis:
     container_name: {{ container_prefix }}_redis
+    init: true
     image: redis:alpine
     ports:
       - "6379:6379"
@@ -82,6 +87,7 @@ services:
 {% if rabbitmq %}
   rabbitmq:
     container_name: {{ container_prefix }}_rabbitmq
+    init: true
     image: rabbitmq:management
     ports:
       - "15672:15672"
@@ -90,6 +96,7 @@ services:
 {% if varnish != '0' %}
   varnish:
     container_name: {{ container_prefix }}_varnish
+    init: true
     build: ./skywire-docker/varnish
     ports:
       - "80:80"
@@ -97,6 +104,7 @@ services:
 
   elasticsearch:
     container_name: {{ container_prefix }}-elasticsearch
+    init: true
     build: ./skywire-docker/elasticsearch
     environment:
       - discovery.type=single-node
