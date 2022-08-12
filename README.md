@@ -96,7 +96,7 @@ Connection details to connect to the Docker database:
 
 ## [Varnish](https://varnish-cache.org/)
 
-Varnish is the recommended FPC for M2 and can be installed with teh `skywire-docker` installer. Once installed via docker, you can configure it by:
+Varnish is the recommended FPC for M2 and can be installed with the `skywire-docker` installer. Once installed via docker, you can configure it by:
 
 * https://devdocs.magento.com/guides/v2.3/config-guide/varnish/config-varnish-magento.html
 * Backend host is the Nginx hostname, similar to: `somehost_nginx`
@@ -131,21 +131,6 @@ Varnish is the recommended FPC for M2 and can be installed with teh `skywire-doc
 ## [Mailhog](https://github.com/mailhog/MailHog)
 
 * I've now installed Mailhog. PHP is all setup to use it. Just make sure to turn on emails in the admin and Mailhog will catch any outgoing emails from PHP. All you need to do is open up [http://localhost:8025](http://localhost:8025)
-
-## [Blackfire](https://blackfire.io/)
-
-Enter the shiny new performance profiler. To use blackfire, first signup for at least a hacker account [here](https://blackfire.io/signup). Once you have your account and can login, head to the [credentials page](https://blackfire.io/my/settings/credentials) where you'll find your server credentials.
-1. In the root of the project, create a `.env` file
-1. Add `.env` to the `.gitignore` file
-1. Add the follwoing into this file:
-~~~
-BLACKFIRE_SERVER_ID=<Server ID>
-BLACKFIRE_SERVER_TOKEN=<Server Token>
-~~~
-1. Now install the Chrome or Firefox plugin from [here](https://blackfire.io/docs/integrations/browsers/index)
-1. `docker-composer up -d` the project
-1. Navigate to a page, and click on the plugin to profile
-
 
 ## XDebug
 

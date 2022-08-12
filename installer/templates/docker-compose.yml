@@ -52,17 +52,6 @@ services:
       - "host.docker.internal:host-gateway"
 {% endif %}
 
-{% if not minimal %}
-  #To use blackfire, create a .env file with the following in it:
-  #BLACKFIRE_SERVER_ID=<some_id>
-  #BLACKFIRE_SERVER_TOKEN=<some_id>
-  blackfire:
-    container_name: {{ container_prefix }}_blackfire
-    image: blackfire/blackfire
-    environment:
-      - BLACKFIRE_SERVER_ID=${BLACKFIRE_SERVER_ID}
-      - BLACKFIRE_SERVER_TOKEN=${BLACKFIRE_SERVER_TOKEN}
-{% endif %}
   mysql:
     container_name: {{ container_prefix }}_mysql
     init: true
