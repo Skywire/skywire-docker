@@ -134,6 +134,16 @@ Varnish is the recommended FPC for M2 and can be installed with the `skywire-doc
 
 ## XDebug
 
+Add [this](https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc) chrome extension to allow you to turn on and off debugging and profiling
+
+### Profiling
+
+https://www.jetbrains.com/help/phpstorm/profiling-with-xdebug.html#analyze-xdebug-profiling-data
+
+### Debugging
+
+https://www.jetbrains.com/help/phpstorm/debugging-with-phpstorm-ultimate-guide.html
+
 These instructions are only necessary for php 7.1 and 7.2
 
 ### Mac
