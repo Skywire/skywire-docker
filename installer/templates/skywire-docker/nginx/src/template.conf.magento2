@@ -19,8 +19,16 @@ map $cookie_XDEBUG_SESSION $cookie_arg_pass {
     XDEBUG_ECLIPSE php-fpm-xdebug;
 }
 
-map $arg_XDEBUG_PROFILE $xdebug_test_pass {
+map $cookie_XDEBUG_PROFILE $cookie_profile_arg_pass {
     default $cookie_arg_pass;
+    xdebug php-fpm-xdebug;
+    1 php-fpm-xdebug;
+    PHPSTORM php-fpm-xdebug;
+    XDEBUG_ECLIPSE php-fpm-xdebug;
+}
+
+map $arg_XDEBUG_PROFILE $xdebug_test_pass {
+    default $cookie_profile_arg_pass;
     1 php-fpm-xdebug;
 }
 
