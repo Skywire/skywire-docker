@@ -36,7 +36,7 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
         {% if phpDot == '7.2' or phpDot == '7.3' or phpDot == '7.4' %}
         && pecl install mcrypt-1.0.3 \
         {% endif %}
-        && docker-php-ext-install {% if phpDot == '7.1' %}mcrypt{% endif %} pdo_mysql soap intl bcmath xsl zip sockets \
+        && docker-php-ext-install {% if framework == 'wordpress' %}mysqli{% endif %} {% if phpDot == '7.1' %}mcrypt{% endif %} pdo_mysql soap intl bcmath xsl zip sockets \
         && docker-php-ext-enable opcache mcrypt
 
 #install NVM

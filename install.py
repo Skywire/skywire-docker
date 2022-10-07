@@ -17,6 +17,8 @@ from distutils import dir_util, file_util
 @click.option('--varnish', prompt="Use Varnish (Version 5 or 6, 0 for none)?", type=click.Choice(["5", "6", "0"]), help="Use Varnish", required=True, default="0")
 @click.option('--redis/--no-redis', prompt="Use Redis?", help="Use Redis", required=True, is_flag=True, default=False)
 @click.option('--rabbitmq/--no-rabbitmq', prompt="Use RabbitMQ?", help="Use RabbitMQ", required=True, is_flag=True, default=False)
+@click.option('--elasticsearch/--no-elasticsearch', help="User elasticsearch?", required=True, is_flag=True,
+              default=False)
 @click.option('--ioncube/--no-ioncube', prompt="Use IonCube?", help="Use IonCube", required=True, is_flag=True,
               default=False)
 @click.option('--xdebug/--no-xdebug', prompt="Use xdebug?", help="Use xdebug", required=True, is_flag=True,
@@ -25,8 +27,6 @@ from distutils import dir_util, file_util
               help="MySQL Password", required=False, default="")
 @click.option('--database', prompt="MySQL database name (will use 'docker' as default if not provided)",
               help="MySQL Database", required=False, default="")
-@click.option('--minimal', help="Minimal install", required=False, is_flag=True,
-              default=False)
 def install(install_path, domain, framework, php, http2, varnish, redis, rabbitmq, ioncube, xdebug, dbpass, database, minimal):
 
     click.echo("Installing skywire-docker")
@@ -61,7 +61,7 @@ def install(install_path, domain, framework, php, http2, varnish, redis, rabbitm
             "rabbitmq": rabbitmq,
             "dbpass": dbpass if dbpass else "pa55w0rd",
             "database": database if database else "docker",
-            'minimal': minimal
+            'elasticsearch': elasticsearch
         },
         "",
         "./../docker-compose.yml"
@@ -80,9 +80,9 @@ def install(install_path, domain, framework, php, http2, varnish, redis, rabbitm
         handle_template("varnish/Dockerfile", {"varnish": varnish})
 
     click.echo("Generate php-fpm config");
-    handle_template("php-fpm/src/skywire_updates.ini", {"container_prefix": container_prefix, 'minimal': minimal})
-    handle_template("php-fpm/src/skywire_updates_xdebug2.ini", {"container_prefix": container_prefix, 'minimal': minimal})
-    handle_template("php-fpm/src/skywire_updates_xdebug3.ini", {"container_prefix": container_prefix, 'minimal': minimal})
+    handle_template("php-fpm/src/skywire_updates.ini", {"container_prefix": container_prefix})
+    handle_template("php-fpm/src/skywire_updates_xdebug2.ini", {"container_prefix": container_prefix})
+    handle_template("php-fpm/src/skywire_updates_xdebug3.ini", {"container_prefix": container_prefix})
     handle_template("php-fpm/Dockerfile", {"ioncube": ioncube, "framework": framework, "phpDot": phpDot})
 
     click.echo("Copying configured docker files to install path");
