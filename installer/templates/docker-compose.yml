@@ -29,7 +29,9 @@ services:
       context: ./skywire-docker/php-fpm
       target: php_base
     links:
+  {% if elasticsearch %}
       - elasticsearch
+  {% endif %}
       - mysql
     volumes:
       - ./:/var/www/html
@@ -42,7 +44,9 @@ services:
       context: ./skywire-docker/php-fpm
       target: php_xdebug
     links:
+  {% if elasticsearch %}
       - elasticsearch
+  {% endif %}
       - mysql
     volumes:
       - ./:/var/www/html

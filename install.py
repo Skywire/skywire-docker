@@ -12,7 +12,7 @@ from distutils import dir_util, file_util
 @click.option('--domain', prompt="The domain name to use without a subdomain e.g. example.com",
               help="Domain name to use", required=True)
 @click.option('--framework', prompt="Which Framework", type=click.Choice(["magento2", "wordpress"]), help="Choose which framework is required", required=True, default="magento2")
-@click.option('--php', prompt="Php Version", type=click.Choice(["71", "7.1", "72","7.2", "73","7.3", "74","7.4"]), help="Php Version", required=True, default="73")
+@click.option('--php', prompt="Php Version", type=click.Choice(["74","7.4","80","8.0","81","8.1"]), help="Php Version", required=True, default="81")
 @click.option('--varnish', prompt="Use Varnish (Version 5 or 6, 0 for none)?", type=click.Choice(["5", "6", "0"]), help="Use Varnish", required=True, default="0")
 @click.option('--redis/--no-redis', prompt="Use Redis?", help="Use Redis", required=True, is_flag=True, default=False)
 @click.option('--rabbitmq/--no-rabbitmq', prompt="Use RabbitMQ?", help="Use RabbitMQ", required=True, is_flag=True, default=False)
@@ -52,7 +52,6 @@ def install(install_path, domain, framework, php, varnish, redis, rabbitmq, elas
         {
             "hostname": hostname,
             "container_prefix": container_prefix,
-            "php": php,
             "xdebug": xdebug,
             "redis": redis,
             "varnish": varnish,
@@ -79,7 +78,6 @@ def install(install_path, domain, framework, php, varnish, redis, rabbitmq, elas
 
     click.echo("Generate php-fpm config");
     handle_template("php-fpm/src/skywire_updates.ini", {"container_prefix": container_prefix})
-    handle_template("php-fpm/src/skywire_updates_xdebug2.ini", {"container_prefix": container_prefix})
     handle_template("php-fpm/src/skywire_updates_xdebug3.ini", {"container_prefix": container_prefix})
     handle_template("php-fpm/Dockerfile", {"ioncube": ioncube, "framework": framework, "phpDot": phpDot})
 
