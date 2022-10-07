@@ -52,14 +52,14 @@ RUN sed -e 's/9000/9001/' \
 #Install grunt globally
 RUN npm install grunt -g
 
-#Install n98 magerun tools
-{% if mage == 1 %}
-RUN curl -L -o n98-magerun.phar https://files.magerun.net/n98-magerun.phar \
-    && chmod +x ./n98-magerun.phar \
-    && mv ./n98-magerun.phar /usr/local/bin/
-{% endif %}
 
-{% if mage == 2 %}
+{% if framework == 'wordpress' %} \
+#Install wp cli
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x ./wp-cli.phar \
+    && mv ./wp-cli.phar /usr/local/bin/
+{% else %} \
+#Install n98 magerun tools
 RUN curl -O https://files.magerun.net/n98-magerun2.phar \
     && chmod +x ./n98-magerun2.phar \
     && mv ./n98-magerun2.phar /usr/local/bin/
