@@ -13,12 +13,10 @@ from distutils import dir_util, file_util
               help="Domain name to use", required=True)
 @click.option('--framework', prompt="Which Framework", type=click.Choice(["magento2", "wordpress"]), help="Choose which framework is required", required=True, default="magento2")
 @click.option('--php', prompt="Php Version", type=click.Choice(["71", "7.1", "72","7.2", "73","7.3", "74","7.4"]), help="Php Version", required=True, default="73")
-@click.option('--http2/--no-http2', prompt="Use Http2?", help="Use Http2", required=True, is_flag=True, default=True)
 @click.option('--varnish', prompt="Use Varnish (Version 5 or 6, 0 for none)?", type=click.Choice(["5", "6", "0"]), help="Use Varnish", required=True, default="0")
 @click.option('--redis/--no-redis', prompt="Use Redis?", help="Use Redis", required=True, is_flag=True, default=False)
 @click.option('--rabbitmq/--no-rabbitmq', prompt="Use RabbitMQ?", help="Use RabbitMQ", required=True, is_flag=True, default=False)
-@click.option('--elasticsearch/--no-elasticsearch', help="User elasticsearch?", required=True, is_flag=True,
-              default=False)
+@click.option('--elasticsearch/--no-elasticsearch', prompt="User elasticsearch?", help="User elasticsearch?", required=True, is_flag=True, default=False)
 @click.option('--ioncube/--no-ioncube', prompt="Use IonCube?", help="Use IonCube", required=True, is_flag=True,
               default=False)
 @click.option('--xdebug/--no-xdebug', prompt="Use xdebug?", help="Use xdebug", required=True, is_flag=True,
@@ -27,7 +25,7 @@ from distutils import dir_util, file_util
               help="MySQL Password", required=False, default="")
 @click.option('--database', prompt="MySQL database name (will use 'docker' as default if not provided)",
               help="MySQL Database", required=False, default="")
-def install(install_path, domain, framework, php, http2, varnish, redis, rabbitmq, ioncube, xdebug, dbpass, database, minimal):
+def install(install_path, domain, framework, php, varnish, redis, rabbitmq, elasticsearch, ioncube, xdebug, dbpass, database):
 
     click.echo("Installing skywire-docker")
 
@@ -44,7 +42,7 @@ def install(install_path, domain, framework, php, http2, varnish, redis, rabbitm
     nginx_template = "template.conf.wordpress" if framework == 'wordpress' else "template.conf.magento2"
     handle_template(
         "nginx/src/" + nginx_template,
-        {"hostname": hostname, "container_prefix": container_prefix, 'http2': http2, "varnish": varnish},
+        {"hostname": hostname, "container_prefix": container_prefix, "varnish": varnish},
         dest="nginx/src/template.conf"
     )
 

@@ -35,14 +35,9 @@ map $arg_XDEBUG_PROFILE $xdebug_test_pass {
 {% if varnish != '0' %}
 server {
     server_name {{ hostname }};
-    {% if http2 %}
-        listen 443 ssl http2;
-        listen [::]:443 ssl http2;
-        ssl_protocols TLSv1.2;
-    {% else %}
-        listen 443 default ssl;
-        ssl_protocols  TLSv1.2 TLSv1.1 TLSv1;
-    {% endif %}
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    ssl_protocols TLSv1.2;
 
     #ssl    on;
     ssl_certificate     /etc/ssl/site.crt;
@@ -71,14 +66,9 @@ server {
     listen 8080 default;
 {% else %}
     listen 80 default;
-{% if http2 %}
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
     ssl_protocols TLSv1.2;
-{% else %}
-    listen 443 default ssl;
-    ssl_protocols  TLSv1.2 TLSv1.1 TLSv1;
-{% endif %}
 
     #ssl    on;
     ssl_certificate     /etc/ssl/site.crt;
