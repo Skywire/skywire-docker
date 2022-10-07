@@ -91,6 +91,7 @@ services:
       - "80:80"
 {% endif %}
 
+{% if elasticsearch %}
   elasticsearch:
     container_name: {{ container_prefix }}-elasticsearch
     init: true
@@ -102,8 +103,6 @@ services:
     ports:
       - "9300:9300"
       - "9200:9200"
-
-{% if not minimal %}
   elastichqhq:
     container_name: {{ container_prefix }}_elastichq
     image: elastichq/elasticsearch-hq
@@ -113,10 +112,10 @@ services:
       - elasticsearch
     environment:
       - HQ_DEFAULT_URL=http://{{ container_prefix }}-elasticsearch:9200
+{% endif %}
 
   mailhog:
     container_name: {{ container_prefix }}_mailhog
     image: mailhog/mailhog
     ports:
       - "8025:8025"
-{% endif %}

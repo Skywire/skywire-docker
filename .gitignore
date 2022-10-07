@@ -1,3 +1,8 @@
 /data/*
 !.gitkeep
 skywire-docker
+bin
+build
+install.spec
+docker-compose.yml
+makefile

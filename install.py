@@ -11,12 +11,12 @@ from distutils import dir_util, file_util
               help="Directory to install to", required=True)
 @click.option('--domain', prompt="The domain name to use without a subdomain e.g. example.com",
               help="Domain name to use", required=True)
-@click.option('--mage', prompt="Magento Version", type=click.Choice(["1", "2"]), help="Magento Version", required=True, default="2")
+@click.option('--framework', prompt="Which Framework", type=click.Choice(["magento2", "wordpress"]), help="Choose which framework is required", required=True, default="magento2")
 @click.option('--php', prompt="Php Version", type=click.Choice(["71", "7.1", "72","7.2", "73","7.3", "74","7.4"]), help="Php Version", required=True, default="73")
-@click.option('--http2/--no-http2', prompt="Use Http2?", help="Use Http2", required=True, is_flag=True, default=True)
 @click.option('--varnish', prompt="Use Varnish (Version 5 or 6, 0 for none)?", type=click.Choice(["5", "6", "0"]), help="Use Varnish", required=True, default="0")
 @click.option('--redis/--no-redis', prompt="Use Redis?", help="Use Redis", required=True, is_flag=True, default=False)
 @click.option('--rabbitmq/--no-rabbitmq', prompt="Use RabbitMQ?", help="Use RabbitMQ", required=True, is_flag=True, default=False)
+@click.option('--elasticsearch/--no-elasticsearch', prompt="User elasticsearch?", help="User elasticsearch?", required=True, is_flag=True, default=False)
 @click.option('--ioncube/--no-ioncube', prompt="Use IonCube?", help="Use IonCube", required=True, is_flag=True,
               default=False)
 @click.option('--xdebug/--no-xdebug', prompt="Use xdebug?", help="Use xdebug", required=True, is_flag=True,
@@ -25,9 +25,7 @@ from distutils import dir_util, file_util
               help="MySQL Password", required=False, default="")
 @click.option('--database', prompt="MySQL database name (will use 'docker' as default if not provided)",
               help="MySQL Database", required=False, default="")
-@click.option('--minimal', help="Minimal install", required=False, is_flag=True,
-              default=False)
-def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, ioncube, xdebug, dbpass, database, minimal):
+def install(install_path, domain, framework, php, varnish, redis, rabbitmq, elasticsearch, ioncube, xdebug, dbpass, database):
 
     click.echo("Installing skywire-docker")
 
@@ -40,11 +38,11 @@ def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, io
     click.echo("Generate nginx Dockerfile")
     handle_template("nginx/Dockerfile", {"hostname": hostname})
 
-    click.echo("Generate nginx config for Magento {}".format(mage))
-    nginx_template = "template.conf" if int(mage) == 1 else "template.conf.magento2"
+    click.echo("Generate nginx config for {}".format(framework))
+    nginx_template = "template.conf.wordpress" if framework == 'wordpress' else "template.conf.magento2"
     handle_template(
         "nginx/src/" + nginx_template,
-        {"hostname": hostname, "container_prefix": container_prefix, 'http2': http2, "varnish": varnish},
+        {"hostname": hostname, "container_prefix": container_prefix, "varnish": varnish},
         dest="nginx/src/template.conf"
     )
 
@@ -61,7 +59,7 @@ def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, io
             "rabbitmq": rabbitmq,
             "dbpass": dbpass if dbpass else "pa55w0rd",
             "database": database if database else "docker",
-            'minimal': minimal
+            'elasticsearch': elasticsearch
         },
         "",
         "./../docker-compose.yml"
@@ -80,10 +78,10 @@ def install(install_path, domain, mage, php, http2, varnish, redis, rabbitmq, io
         handle_template("varnish/Dockerfile", {"varnish": varnish})
 
     click.echo("Generate php-fpm config");
-    handle_template("php-fpm/src/skywire_updates.ini", {"container_prefix": container_prefix, 'minimal': minimal})
-    handle_template("php-fpm/src/skywire_updates_xdebug2.ini", {"container_prefix": container_prefix, 'minimal': minimal})
-    handle_template("php-fpm/src/skywire_updates_xdebug3.ini", {"container_prefix": container_prefix, 'minimal': minimal})
-    handle_template("php-fpm/Dockerfile", {"ioncube": ioncube, "mage": int(mage), "phpDot": phpDot})
+    handle_template("php-fpm/src/skywire_updates.ini", {"container_prefix": container_prefix})
+    handle_template("php-fpm/src/skywire_updates_xdebug2.ini", {"container_prefix": container_prefix})
+    handle_template("php-fpm/src/skywire_updates_xdebug3.ini", {"container_prefix": container_prefix})
+    handle_template("php-fpm/Dockerfile", {"ioncube": ioncube, "framework": framework, "phpDot": phpDot})
 
     click.echo("Copying configured docker files to install path");
     copy_docker_files(install_path)
