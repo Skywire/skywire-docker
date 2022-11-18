@@ -1,6 +1,7 @@
 /data/*
 !.gitkeep
 skywire-docker
+!installer/templates/skywire-docker
 bin
 build
 install.spec
