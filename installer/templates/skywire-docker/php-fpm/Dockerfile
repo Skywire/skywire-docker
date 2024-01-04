@@ -5,10 +5,12 @@ LABEL version="1.0.0"
 LABEL description="Skywire php-fpm{{ container_prefix }} Docker container"
 
 ENV	HOME /root
+ENV	GOPATH $HOME/go
 WORKDIR /$HOME
 
 RUN apt-get update && apt-get install -y \
             default-mysql-client \
+            golang-go \
             git \
             nodejs \
             npm \
@@ -22,7 +24,6 @@ RUN apt-get update && apt-get install -y \
             vim \
             redis-tools \
             pv \
-            sendmail \
             wget
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -34,6 +35,9 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 #install NVM
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
 
+RUN go install github.com/mailhog/mhsendmail@latest
+RUN mv $GOPATH/bin/mhsendmail /usr/local/bin/
+
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 COPY src/skywire_updates.ini $PHP_INI_DIR/conf.d/
@@ -43,7 +47,6 @@ RUN sed -e 's/9000/9001/' \
         
 #Install grunt globally
 RUN npm install grunt -g
-
 
 {% if framework == 'wordpress' %} \
 #Install wp cli
