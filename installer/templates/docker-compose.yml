@@ -118,8 +118,8 @@ services:
       - HQ_DEFAULT_URL=http://{{ container_prefix }}-elasticsearch:9200
 {% endif %}
 
-  mailhog:
-    container_name: {{ container_prefix }}_mailhog
-    image: mailhog/mailhog
+  mailpit:
+    container_name: {{ container_prefix }}_mailpit
+    image: axllent/mailpit
     ports:
       - "8025:8025"
