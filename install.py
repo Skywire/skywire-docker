@@ -12,7 +12,7 @@ from distutils import dir_util, file_util
 @click.option('--domain', prompt="The domain name to use without a subdomain e.g. example.com",
               help="Domain name to use", required=True)
 @click.option('--framework', prompt="Which Framework", type=click.Choice(["magento2", "wordpress"]), help="Choose which framework is required", required=True, default="magento2")
-@click.option('--php', prompt="Php Version", type=click.Choice(["74","7.4","80","8.0","81","8.1","82","8.2"]), help="Php Version", required=True, default="81")
+@click.option('--php', prompt="Php Version", type=click.Choice(["74","7.4","80","8.0","81","8.1","82","8.2","83","8.3"]), help="Php Version", required=True, default="82")
 @click.option('--varnish', prompt="Use Varnish (Version 5 or 6, 0 for none)?", type=click.Choice(["5", "6", "0"]), help="Use Varnish", required=True, default="0")
 @click.option('--redis/--no-redis', prompt="Use Redis?", help="Use Redis", required=True, is_flag=True, default=False)
 @click.option('--rabbitmq/--no-rabbitmq', prompt="Use RabbitMQ?", help="Use RabbitMQ", required=True, is_flag=True, default=False)
